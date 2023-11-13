@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { WorkoutContext } from "../contexts/WorkoutContext";
+import ObjectId from 'bson-objectid';
 
 
 const WorkoutForm = () => {
@@ -7,6 +9,7 @@ const WorkoutForm = () => {
     const [load, setLoad] = useState('');
     const [reps, setReps] = useState('');
     const [error, setError] = useState(null);
+    const { workouts, addWorkout } = useContext(WorkoutContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -27,6 +30,7 @@ const WorkoutForm = () => {
             setError(json.error)
         }
         if (response.ok) {
+            addWorkout(title, load, reps, json._id)
             setTitle('');
             setLoad('');
             setReps('');

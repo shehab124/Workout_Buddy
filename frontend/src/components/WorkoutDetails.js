@@ -1,16 +1,27 @@
+import { useContext } from "react"
+import { WorkoutContext } from "../contexts/WorkoutContext"
 
-const WorkoutDetails = ({ workout }) => {
+
+const WorkoutDetails = ({ workout, id }) => {
+
+    const { deleteWorkout } = useContext(WorkoutContext);
 
     const handleDelete = async () => {
-        await fetch('/api/workouts/' + workout._id, {
+        await fetch('/api/workouts/' + id, {
             method: 'DELETE'
         })
             .then(response => {
-                if (!response.ok)
-                    console.log("Error deleting item")
+                if (!response.ok) {
+                    console.log("Error deleting item: " + id)
+                }
+                else if (response.ok) {
+                    deleteWorkout(id);
+                    //console.log("Workout Deleted id: " + workout._id);
+                }
             })
             .catch(error => {
-                console.log("Error: ", error);
+                //console.log(workout._id)
+                //console.log("Error: ", error);
             })
     }
 
