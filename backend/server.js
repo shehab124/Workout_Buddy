@@ -1,6 +1,6 @@
 require('dotenv').config() //used to load environment variables from .env file
 
-const express = require('express')
+const express = require('express');
 const mongoose = require('mongoose');
 const workoutRoutes = require('./routes/workoutRoutes');
 
@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGO_URI)
         })
     })
     .catch((error) => {
-        console.log(error);
+        console.log("Connecting to DB error: " + error);
     })
 
 
