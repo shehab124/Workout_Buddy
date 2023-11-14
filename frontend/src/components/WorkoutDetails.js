@@ -16,12 +16,7 @@ const WorkoutDetails = ({ workout, id }) => {
                 }
                 else if (response.ok) {
                     deleteWorkout(id);
-                    //console.log("Workout Deleted id: " + workout._id);
                 }
-            })
-            .catch(error => {
-                //console.log(workout._id)
-                //console.log("Error: ", error);
             })
     }
 
@@ -29,10 +24,9 @@ const WorkoutDetails = ({ workout, id }) => {
     return (
         <div className="workout-details">
             <h4>{workout.title}</h4>
-            <button className="delete" onClick={handleDelete}>Delete</button>
             <p><strong>Load (Kg): </strong>{workout.load}</p>
             <p><strong>Reps: </strong>{workout.reps}</p>
-            <p>{workout.createdAt}</p>
+            <span className="material-symbols-outlined" onClick={handleDelete}>delete</span>
         </div>
     )
 }
