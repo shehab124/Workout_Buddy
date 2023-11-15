@@ -67,13 +67,6 @@ header a {
   color: #333;
 }
 
-.workout-details > .delete
-{
-  position: absolute;
-  right: 15px;
-  top: 23px;
-}
-
 /* new workout form */
 label, input {
   display: block;
@@ -104,7 +97,23 @@ div.error {
   border-radius: 4px;
   margin: 20px 0;
 }
-
 input.error {
   border: 1px solid var(--error);
+}
+
+/* navbar */
+nav {
+  display: flex;
+  align-items: center;
+}
+nav a {
+  margin-left: 10px;
+}
+/* auth forms */
+form.signup, form.login {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
 }

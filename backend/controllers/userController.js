@@ -29,7 +29,7 @@ const signupUser = async (req, res) => {
     try {
         const user = await userModel.signup(email, password);
 
-        const token = createToken(user._id)
+        const token = await createToken(user._id)
 
         res.status(200).json({ email, token })
     }
