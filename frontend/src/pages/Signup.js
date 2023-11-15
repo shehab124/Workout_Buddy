@@ -1,38 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import useSignup from '../hooks/useSignup';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [emptyFields, setEmptyFields] = useState([]);
-    const { state, dispatch } = useContext(AuthContext);
+    const { signup, error, isLoading } = useSignup();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const user = { email, password };
 
-        const response = await fetch('/api/user/signup', {
-            method: 'POST',
-            body: JSON.stringify(user),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        const json = await response.json();
-        console.log(json.user)
-        console.log(json)
-        if (!response.ok)
-            setError(json.error)
-
-        if (response.ok) {
-            setEmail('');
-            setPassword('');
-            setError(null);
-            dispatch({ type: 'SIGNUP', payload: json.email })
-        }
+        await signup(email, password);
+        setEmail('');
+        setPassword('');
     }
 
     return (
@@ -50,7 +31,8 @@ const Signup = () => {
                 onChange={(e) => { setPassword(e.target.value) }}
                 value={password}
             />
-            <button>Sign Up</button>
+            <button disabled={isLoading}>Sign Up</button>
+            {error && <div className='error'>{error}</div>}
         </form>
     );
 }
