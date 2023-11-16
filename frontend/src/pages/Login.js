@@ -1,32 +1,19 @@
 import React, { useState } from 'react';
+import useLogin from '../hooks/useLogin';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [emptyFields, setEmptyFields] = useState([]);
-
+    const { login, error, isLoading } = useLogin();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const user = { email, password };
-
-        const response = fetch('/api/user/login', {
-            method: 'POST',
-            body: JSON.stringify(user),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        const json = await response.json();
-
-        if (!response.ok) {
-            setError(json.error)
-            setEmptyFields(json.emptyFields);
-        }
+        await login(email, password);
+        setEmail('');
+        setPassword('');
     }
+
 
     return (
         <form className='login' onSubmit={handleSubmit}>
@@ -43,7 +30,8 @@ const Login = () => {
                 onChange={(e) => { setPassword(e.target.value) }}
                 value={password}
             />
-            <button>Log In</button>
+            <button disabled={isLoading}>Log In</button>
+            {error && <div className='error'>{error}</div>}
         </form>
     );
 }
