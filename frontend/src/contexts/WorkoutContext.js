@@ -1,35 +1,34 @@
-import React, { useState, createContext, useEffect } from 'react';
+import { createContext, useReducer } from 'react'
 
-export const WorkoutContext = createContext();
+export const WorkoutsContext = createContext()
 
-const WorkoutContextProvider = ({ children }) => {
-
-    const [workouts, setWorkouts] = useState(() => {
-        const fetchWorkouts = async () => {
-            const response = await fetch('/api/workouts/')
-            const json = await response.json();
-
-            if (response.ok) {
-                setWorkouts(json);
+export const workoutsReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_WORKOUTS':
+            return {
+                workouts: action.payload
             }
-        }
-        fetchWorkouts();
-    });
-
-    const addWorkout = (title, load, reps, id) => {
-        setWorkouts([{ _id: id, title, load, reps }, ...workouts]);
+        case 'CREATE_WORKOUT':
+            return {
+                workouts: [action.payload, ...state.workouts]
+            }
+        case 'DELETE_WORKOUT':
+            return {
+                workouts: state.workouts.filter((w) => w._id !== action.payload._id)
+            }
+        default:
+            return state
     }
-
-    const deleteWorkout = (id) => {
-        setWorkouts(workouts.filter(workout => workout._id !== id))
-    }
-
-
-    return (
-        <WorkoutContext.Provider value={{ workouts, addWorkout, deleteWorkout }}>
-            {children}
-        </WorkoutContext.Provider>
-    );
 }
 
-export default WorkoutContextProvider;
+export const WorkoutsContextProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(workoutsReducer, {
+        workouts: null
+    })
+
+    return (
+        <WorkoutsContext.Provider value={{ ...state, dispatch }}>
+            {children}
+        </WorkoutsContext.Provider>
+    )
+}

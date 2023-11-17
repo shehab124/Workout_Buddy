@@ -1,23 +1,29 @@
-import { useContext } from "react"
-import { WorkoutContext } from "../contexts/WorkoutContext"
+import { useWorkoutsContext } from "../hooks/useWorkoutContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 
 const WorkoutDetails = ({ workout, id }) => {
 
-    const { deleteWorkout } = useContext(WorkoutContext);
+    const { dispatch } = useWorkoutsContext()
+    const { user } = useAuthContext()
+
 
     const handleDelete = async () => {
-        await fetch('/api/workouts/' + id, {
-            method: 'DELETE'
+
+        if (!user)
+            return
+
+        const response = await fetch('/api/workouts/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
         })
-            .then(response => {
-                if (!response.ok) {
-                    console.log("Error deleting item: " + id)
-                }
-                else if (response.ok) {
-                    deleteWorkout(id);
-                }
-            })
+
+        const json = await response.json();
+
+        if (response.ok)
+            dispatch({ type: 'DELETE_WORKOUT', payload: json })
     }
 
 
