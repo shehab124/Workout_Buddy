@@ -2,7 +2,7 @@ import { useWorkoutsContext } from "../hooks/useWorkoutContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 
-const WorkoutDetails = ({ workout, id }) => {
+const WorkoutDetails = ({ workout }) => {
 
     const { dispatch } = useWorkoutsContext()
     const { user } = useAuthContext()
@@ -13,7 +13,7 @@ const WorkoutDetails = ({ workout, id }) => {
         if (!user)
             return
 
-        const response = await fetch('/api/workouts/' + id, {
+        const response = await fetch('/api/workouts/' + workout._id, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${user.token}`
@@ -22,8 +22,9 @@ const WorkoutDetails = ({ workout, id }) => {
 
         const json = await response.json();
 
-        if (response.ok)
-            dispatch({ type: 'DELETE_WORKOUT', payload: json })
+        if (response.ok) {
+            dispatch({ type: 'DELETE_WORKOUT', payload: workout._id })
+        }
     }
 
 

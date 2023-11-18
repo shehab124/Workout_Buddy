@@ -9,7 +9,7 @@ const WorkoutForm = () => {
     const [load, setLoad] = useState('');
     const [reps, setReps] = useState('');
     const [error, setError] = useState(null);
-    const { dispatch } = useWorkoutsContext();
+    const { workouts, dispatch } = useWorkoutsContext();
     const { user } = useAuthContext()
 
     const [emptyFields, setEmptyFields] = useState([]);
